@@ -1,0 +1,410 @@
+
+$.ajax({
+    url:direc.ruta+'json/estadosCiviles.json',
+	dataType:'json',
+	success:function(response){
+		direc.jsonEstadosCiviles=response
+		target=$('#estadoCivil');
+		value=response[target.html()];
+		target.html(value);
+	}
+});
+$.ajax({
+    url:direc.ruta+'json/tiposIdentificacion.json',
+	dataType:'json',
+	success:function(response){
+		direc.jsonTiposIdentificacion=response;
+		target=$('#tipoDocumento');
+		value=response[target.html()];
+		target.html(value);
+	}
+});
+$.ajax({
+    url:direc.ruta+'json/planesdevidaacin.json',
+	dataType:'json',
+	success:function(response){
+		direc.jsonPlanesDevida=response
+		target=$('#plandevida');
+		value='';
+		if(target.html()!=0){
+			value=response[target.html()];
+			
+		}
+		target.html(value);
+	},
+	error:function(error,aaa){
+		console.log(aaa);
+		alert('error');
+	}
+});
+$.ajax({
+	url:direc.ruta+'json/idiomas.json',
+	dataType:'json',
+	success:function(response){
+		direc.idiomasJson=response;
+		cargarIdiomas();
+	}
+});
+$.ajax({
+	url:direc.ruta+'json/nivelesEstudio.json',
+	dataType:'json',
+	success:function(response){
+		direc.nivelesEstudioJson=response;
+		cargarFormaciones();
+	}
+});
+$.ajax({
+	url:direc.ruta+'json/parentescos.json',
+	dataType:'json',
+	success:function(response){
+		direc.parentescosJson=response;
+	}
+});
+$.ajax({
+	url:direc.ruta+'json/generos.json',
+	dataType:'json',
+	success:function(response){
+		direc.generosJson=response;
+		cargarParientes();
+	}
+});
+
+
+function cargarUbicacionResidencia(paisResidencia){
+	switch(paisResidencia){
+	    case '1':
+	        $('#paisResidencia').html('Colombia');
+	        $.ajax({
+	            url:direc.ruta+'json/colombia.json',
+	        	dataType:'json',
+	        	success:function(response){
+	        		target=$('#deptoResidencia');
+	        		target2=$('#mpioResidencia');
+	        		depto=response[target.html()];
+	        		ciudades=depto.ciudades;
+	        		console.log(ciudades);
+	        		ciudad=ciudades[target2.html()];
+	        		target.html(depto.departamento);
+	        		target2.html(ciudad);
+	        	}
+	        });       
+	    break;
+	    default:
+	    	$('#paisResidencia').html('');
+	        $('#deptoresidencia').html('');
+	        $('#mpioresidencia').html('');   	
+
+	    break;
+	}
+}
+
+function cargarIdiomas(){
+	if($('#idiomas').val()){
+		idiomasValue=JSON.parse($('#idiomas').val());
+	}
+	else{
+		idiomasValue={};
+	}
+	html='';
+	for(x in idiomasValue){
+	   datos=idiomasValue[x];
+	   html='<li>'+
+				'<h5 class="font-weight-bold">'+direc.idiomasJson.idiomas[x]+'</h5>'+
+				'<p>'+
+					'<strong>Lectura:</strong> '+direc.idiomasJson.niveles[datos.lectura]+',<br>'+
+					'<strong>Escritura:</strong> '+direc.idiomasJson.niveles[datos.escritura]+', <br>'+
+					'<strong>Hablado:</strong> '+direc.idiomasJson.niveles[datos.hablado]+
+				'</p>'+
+			'</li>'+html;
+	}
+	$('#lista-idiomas').html(html);
+
+}
+
+function cargarFormaciones(){
+	if($('#formacion').val()){
+		formacionesValue=JSON.parse($('#formacion').val());
+	}
+	else{
+		formacionesValue={};
+	}
+	html='';
+	for(x in formacionesValue){
+		datos=formacionesValue[x];
+		switch(datos.estado){
+		    case '1':
+		        datos.estado="Culminado";
+		        break;
+		    case '2':
+		        datos.estado="Cursando";
+		        break;
+		    case '3':
+		        datos.estado="Abandonado / aplazado";
+		        break;
+		}
+	       html='<tr>'+
+                    '<td>'+
+                      '<div class="cont-cell">'+
+                        datos.institucion+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="cont-cell">'+
+                        (direc.nivelesEstudioJson[datos.nivelEstudio])+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="col-cell">'+
+                        datos.titulo+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="col-cell">'+
+                        datos.estado+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="col-cell">'+
+                        datos.desde+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="col-cell">'+
+                        datos.hasta+
+                      '</div>'+
+                    '</td>'+
+                '</tr>'+html;
+	}
+	$('#lista-formacion').find('tbody').html(html);
+}
+function cargarServicioComunitarios(){
+	if($('#servicioComunitario').val()){
+		servicioComunitarioValue=JSON.parse($('#servicioComunitario').val());
+	}
+	else{
+		servicioComunitarioValue={};
+	}
+	html='';
+	for(x in servicioComunitarioValue){
+		datos=servicioComunitarioValue[x];
+		html='<tr>'+
+                '<td class="text-capitalize">'+datos.organizacion+'</td>'+
+                '<td class="text-capitalize">'+datos.programa+'</td>'+
+                '<td class="first-letter-uppercase">'+datos.encargo+'</td>'+
+                '<td>'+datos.desde+'4</td>'+
+                '<td>'+datos.hasta+'</td>'+
+              '</tr>'+
+              '<tr>'+
+                '<td class="align-middle">Descripción</td>'+
+                '<td colspan="4">'+
+                 ' <p class="text-justify">'+datos.descripcion+'</p>'+
+                '</td>'+
+              '</tr>'+html;
+	}
+	$('#lista-servicio-comunitario').find('tbody').html(html);
+}
+cargarServicioComunitarios();
+function cargarExperienciaLaborales(){
+	if($('#experienciaLaboral').val()){
+		experienciaLaboralValue=JSON.parse($('#experienciaLaboral').val());
+	}
+	else{
+		experienciaLaboralValue={};
+	}
+	html='';
+	for(x in experienciaLaboralValue){
+		datos=experienciaLaboralValue[x];
+		html='<tr>'+
+				'<td rowspan="2" class="align-middle" style="background:rgb(240,240,240) !important;">'+x+'</td>'+
+              	'<td class="text-uppercase">'+datos.organizacion+'</td>'+
+               ' <td class="first-letter-uppercase">'+datos.cargo+'</td>'+
+                '<td>'+datos.desde+'</td>'+
+               ' <td>'+datos.hasta+'</td>'+
+              '</tr>'+
+             ' <tr>'+
+               ' <td class="text-right"><small class="font-weight-bold">Motivo retiro:</small></td>'+
+               '<td colspan="3" class="first-letter-uppercase"><small class="bg-info text-blanco">&nbsp;'+datos.motivo+'&nbsp;</small</td>'+
+             ' </tr>'+html;
+		/*
+	   html='<li>'+
+				'<div class="well">'+
+					'<div class="actions-elements">'+
+						'<a href="'+x+'" onClick="event.preventDefault();eliminarExperienciaLaboral(this);" title="Eliminar sericio comunitario" class="delete-element"><i class="fa fa-trash" aria-hidden="true"></i></a>'+
+					'</div>'+
+					'<h3>'+datos.cargo+'</h3>'+
+					'<h5>'+datos.organizacion+'</h5>'+
+					'<h6>Desde: <span>'+datos.desde+'</span> - Hasta <span>'+datos.hasta+'</span></h6>'+
+					'<p><strong>Motivo retiro:</strong><br>'+datos.motivo+'</p>'+
+				'</div>'+
+			'</li>'+html;
+			*/
+	}
+	$('#lista-experiencia-laboral').find('tbody').html(html);
+}
+cargarExperienciaLaborales();
+function cargarActualizacionAcademica(){
+	if($('#actualizacionAcademica').val()){
+		actualizacionAcademicaValue=JSON.parse($('#actualizacionAcademica').val());
+	}
+	else{
+		actualizacionAcademicaValue={};
+	}
+	html='';
+	for(x in actualizacionAcademicaValue){
+		datos=actualizacionAcademicaValue[x];
+	   
+	   html='<tr>'+
+                   ' <td>'+
+                     ' <div class="cont-cell">'+
+                       		datos.institucion+
+                     ' </div>'+
+                    '</td>'+
+                   ' <td>'+
+                     ' <div class="col-cell">'+
+                       datos.nombre+
+                      '</div>'+
+                    '</td>'+
+                   ' <td>'+
+                      '<div class="col-xs-cell">'+
+                        datos.desde+
+                      '</div>'+
+                   ' </td>'+
+                    '<td>'+
+                      '<div class="col-xs-cell">'+
+                        datos.hasta+
+                      '</div>'+
+                    '</td>'+
+                '</tr> '+html;
+	}
+	$('#lista-actualizacion-academica').find('tbody').html(html);	
+}
+cargarActualizacionAcademica();
+
+function cargarParientes(){
+	if($('#parientes').val()){
+		composiconFamiliar=JSON.parse($('#parientes').val());
+	}
+	else{
+		composiconFamiliar={};
+	}
+	html='';
+	for(x in composiconFamiliar){
+		datos=composiconFamiliar[x];
+		html='<tr>'+
+                    '<td>'+
+                      '<div class="cont-cell">'+
+                        '<span class="text-capitalize">'+datos.nombre+'</span>'+
+                      '</div>  '+
+                    '</td>'+
+                    '<td>'+
+                     ' <div class="cont-cell">'+
+                        '<span>'+datos.documento+'</span>'+
+                      '</div>'+
+                    '</td>'+
+                    '<td>'+
+                      '<div class="cont-cell">'+
+                       ' <span>'+(direc.generosJson[datos.genero])+'</span>'+
+                     '</div>'+
+                   ' </td>'+
+                   ' <td>'+
+                     ' <div class="cont-cell">'+
+                       ' <span>'+(direc.parentescosJson[datos.parentesco])+'</span>'+
+                      '</div>'+
+                   ' </td>'+
+                   ' <td>'+
+                     ' <div class="col-cell">'+
+                       ' <span>'+datos.contacto+'</span>'+
+                      '</div>'+
+                    '</td>'+
+             '</tr>'+html;
+
+	}
+	$('#list-composicon-familiar').find('tbody').html(html);
+}
+$(document).ready(function(){
+	var cv=getParameterByName('cv');
+	if(cv!=""){
+		cv='get/cod_usuario='+cv+'/';
+	}
+	else{
+		cv='';
+	}
+	$.ajax({
+		url:direc.path_app_v1+'usuario/consultarusuario/'+cv,
+		method:'GET',
+		dataType:'json',
+		success:function(response){
+			console.log(response);
+			if (response.estado){
+				//msg('.cont-mensaje','Información',response.mensaje);
+				direc.dataUsuario=response.data[0];
+				usuario=response.data[0];
+				$('.foto-cv').attr('src',direc.ruta+usuario.foto);
+				$('#nombres').html(usuario.nombres);
+				$('#apellidos').html(usuario.apellidos);
+				$('#tipoSangre').find('option[value="'+((usuario.tipoSangre).toUpperCase())+'"]').selected();
+				$('#genero').find('option[value="'+usuario.genero+'"]').selected();
+				$('#estadoCivil').html(direc.jsonEstadosCiviles[usuario.estadoCivil]);
+				$('#tallaCamisa').find('option[value="'+((usuario.tallaCamisa).toUpperCase())+'"]').selected();
+				$('#tallaPantalon').html(usuario.tallaPantalon);
+				$('#tallaZapatos').val(usuario.tallaZapatos);
+				$('#fechaNacimiento').html(usuario.fechaNacimiento);
+				$('#lugarNacimiento').val(usuario.lugarNacimiento);
+				$('#nacionalidad').val(usuario.nacionalidad);
+				$('#tipoDocumento').html(direc.jsonTiposIdentificacion[usuario.tipoDocumento]);
+				$('#numeroDocumento').html(usuario.numeroDocumento);
+				$('#lugarExpedicion').html(usuario.lugarExpedicion);
+				$('#fechaExpedicion').html(usuario.fechaExpedicion);
+				$('#correo').html(usuario.correo);
+
+
+				$('#paisResidencia').html(usuario.paisResidencia);
+				$('#deptoResidencia').html(usuario.deptoResidencia);
+				$('#mpioResidencia').html(usuario.cityResidencia);
+				cargarUbicacionResidencia(usuario.paisResidencia);
+
+				$('#direccion').html(usuario.direccion);
+				$('#contactoa').html(parseInt(usuario.contacto1));
+				$('#contactobWW').html(parseInt(usuario.contacto2));
+				$('#pertenenciaEtnica').html(usuario.pertenenciaEtnica);
+				$('#plandevida').html(direc.jsonPlanesDevida[usuario.plandevida]);
+				$('#territorio').html(usuario.territorio);
+				$('#tipoSeguridadSocial').html(usuario.tipoSeguridadSocial);
+				$('#eps').html(usuario.eps);
+				$('#afp').html(usuario.fondoPensiones);
+				$('#arl').html(usuario.arl);
+				$('#descripcionDiscapacidad').val(usuario.descripcionDiscapacidad);
+				$('#perfilProfesional').html(usuario.perfilProfesional);
+				$('#descripcionPerfilProfesional').html(usuario.descripcionPerfilProfesional);
+
+				$('#idiomas').val(usuario.idiomas);
+				cargarIdiomas();
+				$('#formacion').val(usuario.formacion);
+				cargarFormaciones();
+				$('#actualizacionAcademica').val(usuario.actualizacionAcademica);
+				cargarActualizacionAcademica();
+				$('#servicioComunitario').val(usuario.servicioComunitario);
+				cargarServicioComunitarios();
+				$('#experienciaLaboral').val(usuario.experienciaLaboral);
+				cargarExperienciaLaborales();
+				$('#parientes').val(usuario.parientes);
+				cargarParientes();
+
+				//$('#tipoSangre').find('option[value="'++'"]').selected();
+				//$('#').val(usuario.);
+
+
+				$('title').html($('title').html()+': '+usuario.nombres+' '+usuario.apellidos);
+			}
+			else{
+				msg('.cont-mensaje','Información',response.mensaje);
+			}
+		},
+		error:function(){
+			msg('.cont-mensaje','Información','Error al cargar información del usuario');
+		}
+	});
+
+
+
+});

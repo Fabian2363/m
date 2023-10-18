@@ -1,0 +1,44 @@
+$('.login').ajaxForm({
+	dataType:'json',
+	timeout:30000,
+	beforeSubmit:function(variables){
+		$('#ms-login').attr('class','alert alert-info').html('Verificando datos...');
+		resul=true;
+		mensajes='';
+		for(x in variables){
+			campo=variables[x];
+			switch(campo.name){
+				case 'correo':
+					if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(campo.value)){
+						mensajes+='<small>El campo Correo debe ser una direccion de correo valida por EJ: example@dominio.com</small><br>'
+						resul=false;
+					}
+				break;
+			}
+		}
+		if(!resul){
+			$('#ms-login').attr('class','alert alert-danger').html(mensajes);
+		}
+		return resul;
+	},
+	success:function(respuesta){
+		console.log(respuesta);
+		if(respuesta.estado==1){
+			$('#ms-login').attr('class','alert alert-success').html('Iniciando...');
+			window.location.href=respuesta.data['ruta'];
+		}
+		else{
+           $('#ms-login').attr('class','alert alert-danger').html('<small>'+respuesta.mensaje+'</small>');
+		}
+	},
+	error:function(jqXHR,textStatus,errorThrown){
+		console.log(textStatus);
+		if(textStatus=='timeout'){
+			window.location.reload();
+		}
+		else{
+			$('#ms-login').attr('class','alert alert-danger').html('<small>En el momento no se puede procesar tu solicitud, intenta de nuevo o recarga la página.</small>');
+		}
+		
+	}
+});

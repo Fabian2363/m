@@ -1,0 +1,92 @@
+var sss='';
+$(document).on('ready',function(){
+    //Abrir ventana subida de archivo 
+    $('.accion-img').on('click',function(event){
+    	event.preventDefault();
+    	$('#'+$(this).data('target')).click();
+    });
+    $('.vista-previa-file').on('change',function(event){
+    	if(window.File && window.FileReader && window.FileList && window.Blob){
+    		var objetivo=$(this).data('objetivo');
+    		handleFileSelect(event,objetivo);
+    	}
+    	else{
+    		alert('Tu navegador es muy antiguo no soporta the file APIs. Actualizalo');
+    	}
+    });
+    $('.verificarDocumento').on('change',function(event){
+        if(window.File && window.FileReader && window.FileList && window.Blob){
+            handleFileDocument(event);
+        }
+        else{
+            alert('Tu navegador es muy antiguo no soporta the file APIs. Actualizalo');
+        }
+    });
+
+
+    //Remover imagen vista previa
+    $('.remove-img').on('click',function(){
+    	objetivo=$(this).data('objetivo');
+    	$('#input-'+objetivo).val('');
+    	$('#vista-'+objetivo).attr('src',direc.imgDefault01);
+        $('#accion-'+objetivo).html('Subir foto');
+    	$('#close-'+objetivo).hide();
+    });
+
+    //Cerrar mensaje
+    $('body').on('click','.cerrar-mensaje',function(event){
+        event.preventDefault();
+        target=$($(this).data('target'));
+        if(target.hasClass('fadeInRight')){
+            target.removeClass('fadeInRight').addClass('fadeOutRight');
+        }
+    });
+    //Refrescar
+    $('.refresh').on('click',function(){
+        window.location.reload();
+    });
+    //Reenviar Correo activacion
+    $('#reneviarCorreoActivacion').on('click',function(event){
+        event.preventDefault();
+        $.ajax({
+            method:'POST',
+            url:direc.path_app_v1+'usuario/reenviaractivacioncuenta/',
+            dataType:'json',
+            beforeSend:function(){
+                msg('.cont-mensaje','Resultado rrenvio correo','Enviando correo, espera por favor...');
+            },
+            success:function(response){
+                if(response.estado){
+                    msg('.cont-mensaje','Resultado reenvio correo',response.mensaje,'');
+                }
+                else{
+                    msg('.cont-mensaje','Resultado reenvio correo',response.mensaje,'');
+                }
+            }
+            
+        });
+    });
+    //Scale iframes
+    $("iframe").load(function() {
+        $("#iframe_name").contents().find('html').css('-moz-transform', 'scale(<?=$scale?>)');
+        $("#iframe_name").contents().find('html').css('-moz-transform-origin', 'left top');
+        $("#iframe_name").contents().find('html').css('-webkit-transform', 'scale(<?=$scale?>)');
+        $("#iframe_name").contents().find('html').css('-webkit-transform-origin', 'left top');
+        $("#iframe_name").contents().find('html').css('transform', 'scale(<?=$scale?>)');
+        $("#iframe_name").contents().find('html').css('transform-origin', 'left top');
+        if (navigator.appVersion.match(/MSIE/)) {
+            $("#iframe_name").contents().find('html').css('zoom', '<?=(100*$scale)?>%'); 
+        }
+    });
+    //Ajustar los OBJ que tengan numero para separarlos por puntos de miles.
+    loadFormat();
+
+    var fullscreen=getParameterByName('fullscreen');
+    if(fullscreen){
+        $('.fullscreen').css({
+            'display':'none'
+        });
+        $('body').removeClass('img-bg');
+    }
+
+});

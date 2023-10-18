@@ -1,0 +1,207 @@
+*{
+	font-family: calibri,arial;
+	-webkit-print-color-adjust: exact;
+	font-size: 16px;
+}
+.textarea-hidden{
+	display: none;
+}
+.container-fluid,
+.container,
+#cont-pantallas{
+	min-width: 100%;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+/**
+Colores generales
+**/
+.bg-cafe{
+	background: #653131;	 
+}
+.text-cafe{
+	color: #653131;
+}
+.container-fluid,
+.container{
+	padding:0;
+	margin:0;
+}
+.cont-impresion{
+	background: #fff;
+	overflow: hidden !important;
+	z-index: -2;
+	width: 25cm;
+	margin:auto !important;
+}
+.box-impresion{
+	padding: 15px !important;
+	width: 25cm;
+}
+
+thead .encabezado{
+	position: relative;
+}
+.encabezado-pagina,
+.pie-pagina{
+	width: 100%;
+}
+.foto-cv{
+	position: absolute;
+	right: 28px !important;
+	top: 60px !important;
+ 	width: 4.2cm !important;
+ 	height: 5.2cm !important;
+}
+
+/*
+Estilo bloques
+*/
+
+.block{
+  padding: 0px;
+}
+.block h2{
+  position: relative;
+  color: #fff;
+}
+.block .numero{
+  position: relative;
+  font-size: 11px;
+  width: 0.72cm;
+  height: 0.72cm;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  z-index: 99;
+}
+.block .numero span{
+  position: absolute;
+  top: 15%;
+  left: 35%;
+}
+.block .line{
+  display: inline-block;
+  height: 5px;
+  width: 1.90cm;
+  left: 0px;
+  top: 10px;
+  position: absolute;
+}
+.block .text{
+  position: absolute;
+  display: block;
+  text-transform: uppercase;
+  font-size: 11px;
+  left: 1.5cm;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: inline-block;
+  font-weight: lighter;
+}
+
+/*
+Estilo celdas
+*/
+
+.block table,
+.block table tr,
+.block table td,
+.block table td label{
+	background: transparent !important;
+}
+.block table td{
+	padding: 10px;
+}
+.block table .cont-cell label{
+	display: block;
+	font-weight: bold;
+	margin-bottom: 1px;
+	font-style: italic;
+	text-transform: uppercase;
+}
+.block table .cont-cell p{
+	margin-bottom: 2px;
+}
+.block table .cont-cell p::first-letter{
+	text-transform: uppercase;
+}
+/*
+Lista idiomas
+*/
+#lista-idiomas{
+	padding: 0;
+	margin:0;
+}
+#lista-idiomas li{
+	display: inline-block;
+	margin: 0 15px;
+}
+
+/*
+Estilo menu para usuarios o candidatos
+*/
+.menu-impresion-usuarios{
+	position: fixed;
+	margin: 0;
+	list-style: none;
+	z-index: 9999999;
+	width: 100%;
+	right: 0;
+	box-shadow: 0 -3px 2px rgba(0,0,0,.2) inset;
+}
+.menu-impresion-usuarios li{
+	display: inline-block;
+}
+.menu-impresion-usuarios li a{
+	display: block;
+	padding: 15px;
+	color: #fff;
+	text-decoration: none;
+}
+.menu-impresion-usuarios li a:hover{
+	background: #3a5683;
+	color: #fff;
+}
+
+@media print{
+*{
+	font-size: 17px !important;
+}
+.menu-impresion-usuarios{
+	display: none;
+}
+.list-notifications{
+	display: none;
+}
+
+.cont-impresion{
+	width: 1200px;
+	padding-left: 15px;
+}
+thead,
+thead tr,
+thead tr th{
+	padding: 0 !important;
+	margin:0 !important;
+}
+thead tr th{
+	padding: 0 10px !important;
+}
+.box-impresion{
+	padding: 0 !important;
+	width: 100%;
+}
+.foto-cv{
+	position: absolute;
+	right: 39px !important;
+	top: 75px !important;
+ 	width: 5.2cm !important;
+ 	height: 6.65cm !important;
+}
+
+.salto-linea{
+	page-break-after: always !important;
+}
+
+}/* / print */

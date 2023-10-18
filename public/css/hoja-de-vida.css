@@ -1,0 +1,359 @@
+
+#alerta-cambios{
+	background: #afd5aa;
+	color: #fff;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	left: 0;
+	text-align: center;
+	display: none;
+	z-index: 99999;
+}
+#alerta-cambios .fa{
+	color: #fff;
+}
+#form-hdv {
+	padding-bottom: 15% !important;
+}
+.input-fecha{
+	display: inline-block;
+}
+.well{
+	overflow: hidden;
+	background: rgb(240,240,240);
+	padding: 5px 15px;
+	margin-bottom: 15px;
+	border: 1px solid rgb(230,230,230);
+}
+
+
+
+.textarea-hidden{
+	height: 0px;
+	visibility: hidden;
+}
+
+.btn-submit{
+	width: 70%;
+}
+.btn-submit .fa{
+	color: #fff;
+}
+.msg-required{
+	display: none;
+	position: absolute;
+	background: red;
+	color: #fff;
+	bottom: 0;
+    left: 5px;
+    bottom: -17px;
+    font-size: 12px;
+    padding: 0 3px;
+}
+
+/*
+Estilos tabpanel
+*/
+#menu-hoja-de-vida{
+	margin-top: -2px;
+}
+#menu-hoja-de-vida li a{
+	position: relative;
+	border-radius: 0;
+	font-size: 100%;
+	padding: 15px 16.75px;
+	color: rgb(60,60,60);
+	border-right: 1px solid #ccc;
+	font-weight: 400;
+}
+#menu-hoja-de-vida li:last-child a{
+	border-right: none;
+}
+#menu-hoja-de-vida li a i{
+	font-weight: lighter;
+}
+#menu-hoja-de-vida li a:hover{
+	background: #7FD57C;
+	color: #fff;
+}
+#menu-hoja-de-vida li a.active{
+	background: #4ea44b;
+	color: #fff;
+	border: 1px solid #4ea44b;
+}
+#menu-hoja-de-vida li a .badge{
+	position: absolute;
+	margin: auto;
+	left: 0;
+	top: 0;
+	border-radius: 0;
+	border-bottom-right-radius: 5px;
+}
+.tabpanel-body{
+	padding: 15px;
+}
+.tab-pane h6{
+	font-weight: lighter;
+}
+
+.panel{
+	padding:0;	
+}
+.panel-heading h4{
+	font-weight: bold;
+	font-family: 'Roboto Condensed',sans-serif;	
+}
+label{
+	font-family: 'Roboto Condensed',sans-serif;
+}
+.form-inline .form-group{
+	padding: 10px 0 10px 5px;
+}
+.form-inline .form-group input[class="form-control"],
+.form-group .input-100{
+	width: 100% !important;
+}
+.form-group textarea{
+	min-height: 220px;
+	max-width: 100%;
+}
+.form-group-auto{
+	min-width: auto !important;
+}
+#cont-descripcion-capacidades-diferentes{
+    display:none;
+}
+#tipos-licencia{
+	display: inline-block;
+}
+
+/***
+Estilo vista previa foto hoja de vida
+***/
+.list-upload-imagenes{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+.list-upload-imagenes li{
+	display: inline-block;
+}
+.list-upload-imagenes li .img-hdv-usuario{
+	width: 128px;
+	position: relative;
+	border:1px solid #ccc;
+}
+.list-upload-imagenes li div input[type="file"]{
+	visibility: hidden;
+	height: 0px;
+	width: 0px;
+	position: absolute;
+}
+.list-upload-imagenes li div .remove-img{
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: #e51b1b;
+	width: 25px;
+	height: 25px;
+	border-radius: 10px;
+	display: none;
+	cursor: pointer;
+}
+.list-upload-imagenes li div .remove-img .fa{
+	color: #fff;
+}
+.list-upload-imagenes li div img{
+	width: 100%;
+	min-height: 128px;
+}
+.list-upload-imagenes li div a{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background: rgba(78,164,75,.8);
+	color: #fff !important;
+}
+.list-upload-imagenes li div a:hover{
+	background: #4ea44b;
+}
+
+
+/**
+Estilo panel idiomas
+**/
+.padding-top-bottom{
+	padding: 15px 0;
+}
+.cont-add{
+	display: none;
+	background: rgb(245,245,245);
+	padding: 15px;
+}
+.btn-anadir .fa,
+.btn-ocultar .fa{
+	color: #fff;
+}
+.actions-elements{
+	text-align: right;
+}
+.delete-element{
+	display: inline-block;
+	margin-bottom: 15px;
+	background: #e51b1b;
+	color: #fff;
+	width: 20px;
+	height: 20px;
+	font-size: 11px;
+	border-radius: 50%;
+	text-align: center;
+	padding: 2px;
+}
+.delete-element .fa{
+	color: #fff;
+}
+.cont-list-idiomas{
+	padding: 0 15px;
+}
+.cont-list{
+	margin:0;
+	padding: 15px;
+	list-style: none;
+}
+.cont-list li h3{
+	margin-top: 0;
+	font-family: 'Roboto Condensed',sans-serif
+}
+.cont-list-idiomas ul li{
+	display: inline-block;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+}
+.cont-list-idiomas ul li h4{
+	margin:0;
+	padding-bottom: 15px;
+	font-weight: bold;
+	font-family: 'Roboto Condensed',sans-serif;
+
+}
+.cont-lista-formacion ul li h3{
+	margin:0;
+}
+.cont-lista-formacion ul li h5,
+.cont-lista-formacion ul li h6{
+	display: inline-block;
+}
+.cont-lista-formacion ul li h6{
+	float: right;
+}
+
+/*
+Estilo Composicion familiar
+*/
+.cont-lista-composicion-familiar{
+	padding: 15px;
+}
+
+/*
+Estilo accion formulario hoja de vida
+*/
+.mensaje-form{
+	display: none;
+}
+.cont-botons-action-formulario{
+	position: fixed;
+	bottom: 0;
+	padding: 10px;
+	width: 72.9%;
+	background: rgb(230,230,230);
+	border: 1px solid #ccc;
+	box-shadow: 0 0 5px #ccc;
+}
+.cont-botons-action-formulario .btn{
+	margin: 0 5px;	
+}
+
+/*
+Estilo contenido cargar soporte
+*/
+#vista-soporte{
+	width: 100%;
+	height: 1200px;
+	display: block;
+	border: 1px solid #ccc;
+}
+
+@media(max-width: 768px){
+.encabezado h2{
+	font-size: 120%;
+	text-align: center;
+	font-weight: bold;
+}
+.cont-derecho{
+	padding: 0;
+}
+
+/*
+Estilos menu hoja de vida
+*/
+#menu-hoja-de-vida{
+	display: none;
+}
+/*
+Estilos tab-pane
+*/
+.tab-content .tab-pane{
+	display: block;
+	opacity: inherit;
+}
+
+/**
+Estilo panel idiomas
+**/
+.cont-list-idiomas ul li{
+	width: 48%;
+}
+.cont-list-idiomas ul li h4{
+	margin:0;
+	padding-bottom: 15px;
+	font-size: 120%;
+	font-weight: bold;
+	font-family: 'Roboto Condensed',sans-serif;
+
+}
+.cont-list-idiomas ul li p{
+	font-size: 80%;
+}
+
+/*
+Estilo accion formulario hoja de vida
+*/
+.cont-botons-action-formulario{
+	position: fixed;
+	bottom: 0;
+	padding: 5px;
+	width: 91.5%;
+	background: rgb(237,237,237);
+	border: 1px solid #ccc;
+	text-align: center;
+	z-index: 99999999;
+}
+.cont-botons-action-formulario small span{
+	font-size: 80%;
+}
+.cont-botons-action-formulario .btn{
+	font-size: 11px;
+	margin: 0;
+}
+
+}/* Pantallas pequeñas*/
+@media(min-width: 768px){
+.form-inline .form-group{
+	width: 245px;
+}
+
+}/* Pantallas grandes*/

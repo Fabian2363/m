@@ -1,0 +1,8 @@
+header,
+#menu-aplicacion,
+.list-notifications{
+	display: none;
+}
+.img-bg{
+	background-image: none !important;
+}

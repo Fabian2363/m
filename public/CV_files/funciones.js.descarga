@@ -1,0 +1,391 @@
+
+var direc={
+	'ruta':window.location.origin+'/',
+    'path_app_v1':window.location.origin+'/app/v1/',
+    'date':new Date(),
+    'jsonPais':'',
+    'pagination':{
+        0:{'limit':'25',
+            'page':'1',
+            's':''
+            }
+    },
+    'defaultLimits':{
+        0:{text:'10',value:'10'},
+        1:{text:'25',value:'25'},
+        2:{text:'50',value:'50'},
+        3:{text:'100',value:'100'},
+        4:{text:'250',value:'250'},
+        5:{text:'500',value:'500'}
+    }
+};
+direc.imgDefault01=direc.ruta+'img/principales/camara.png';
+direc.imgDefaultHdv=direc.ruta+'img/principales/foto-default-hdv.png';
+//Generales
+$('.imagen-camara').attr('src',direc.imgDefault01);
+$('.imagen-hdv').attr('src',direc.imgDefaultHdv);
+ano=direc.date.getFullYear();
+mes=direc.date.getMonth()+1;
+dia=direc.date.getDate();
+
+mes=(mes<10)?'0'+mes:mes;
+dia=(dia<10)?'0'+dia:dia;
+
+
+//Espacio que ocupa barra superior (header)
+
+$(function () {
+  $('[data-toggle="popover"]').popover({trigger: 'focus'});
+})
+/*****
+Control formularios de search
+******/
+$('#search,#search-movil').ajaxForm({
+    dataType:'json',
+    beforeSubmit:function(variables){
+        s=variables[0].value;
+        s=s.replace(/ /g,'-');
+        console.log(variables);
+        window.location.href=direc.ruta+'ofertas-laborales/get/s='+s+'/';
+        return false;
+    }
+});
+
+
+//Generales//
+moment.locale('es');  
+$('.datetime').combodate({
+    firstItem: 'name',
+    customClass: 'form-control input-fecha',
+    minYear:direc.date.getFullYear()+10,
+    maxYear:direc.date.getFullYear(),
+    yearDescending: false,
+    smartDays:true,
+    value: ano+'-'+mes+'-'+dia+' 12 pm'
+});  
+$('.date').combodate({
+    firstItem: 'name',
+    customClass:'form-control input-fecha',
+    minYear:direc.date.getFullYear()-90,
+    maxYear:direc.date.getFullYear()+1,
+    yearDescending: true,
+    smartDays:true,
+    value: ano+'-'+mes+'-'+dia,
+}); 
+$('.datenacimiento').combodate({
+    firstItem: 'name',
+    customClass: 'form-control input-fecha',
+    minYear:1917,
+    maxYear:direc.date.getFullYear(),
+    yearDescending: true,
+    smartDays:true,
+}); 
+
+$('.datemesano').combodate({
+    firstItem: 'name',
+    customClass: 'form-control input-fecha',
+    minYear:1917,
+    maxYear:direc.date.getFullYear()+7,
+    yearDescending: true,
+    smartDays:true,
+    value: ano+'-'+mes,
+});
+$('.datemesano').val(mes+'-'+ano);
+
+$('.dateano').val(ano);
+$('.dateano').combodate({
+    firstItem: 'name',
+    customClass: 'form-control input-fecha',
+    minYear:ano-2,
+    maxYear:direc.date.getFullYear(),
+    yearDescending: true,
+    smartDays:true,
+    value: ano,
+});
+
+//Funciones//
+//Limpiar cadena
+function limpiarCadena(cadena){
+   // Definimos los caracteres que queremos eliminar
+   var specialChars = "!@#$^&%*()+=[]\/{}|:<>?,.";
+
+   // Los eliminamos todos
+   for (var i = 0; i < specialChars.length; i++) {
+       cadena= cadena.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
+   }   
+
+   // Lo queremos devolver limpio en minusculas
+   cadena = cadena.toLowerCase();
+
+   // Quitamos espacios y los sustituimos por _ porque nos gusta mas asi
+  // cadena = cadena.replace(/ /g,"_");
+
+   // Quitamos acentos y "ñ". Fijate en que va sin comillas el primer parametro
+   cadena = cadena.replace(/á/gi,"a");
+   cadena = cadena.replace(/é/gi,"e");
+   cadena = cadena.replace(/í/gi,"i");
+   cadena = cadena.replace(/ó/gi,"o");
+   cadena = cadena.replace(/ú/gi,"u");
+   cadena = cadena.replace(/ñ/gi,"n");
+   return cadena;
+}
+function getFecha(){
+    var date=new Date(),
+        fecha={
+            ano:date.getFullYear(),
+            mes:((date.getMonth()+1)<10)?'0'+(date.getMonth()+1):date.getMonth()+1,
+            dia:(date.getDate()<10)?'0'+date.getDate():date.getDate()
+        };
+
+    return fecha;
+}
+//Dar formato de moneda
+function formatCurrency (locales, currency, fractionDigits, number) {
+  var formatted = new Intl.NumberFormat(locales, {
+    currency: currency,
+    minimumFractionDigits: fractionDigits
+  }).format(number);
+  return formatted;
+}
+function numberFormat(numero,centavos=0){
+   return  formatCurrency("es-CO", "COP", centavos, numero);
+}
+function loadFormat(){
+    $('.format-moneda').each(function(i){
+        $(this).html(numberFormat($(this).html()));
+    });
+}
+webshims.setOptions('forms-ext', {
+    replaceUI: 'auto',
+    types: 'number'
+});
+webshims.polyfill('forms forms-ext');
+function calcularUtilidadBruta(pc,pv){
+    return ((pv-pc)/pc)*100;
+}
+//Manejo de una archivo imgen seleccionado para subir
+function handleFileSelect(evt,objetivo){
+    var files=evt.target.files,file=files[0];
+    if (file.type.match('image.*')) {
+        var reader = new FileReader();
+
+        reader.onload = (function(theFile){
+            return function(e){
+                $('#vista-'+objetivo).attr('src',e.target.result);
+                $('#accion-'+objetivo).html('Cambiar');
+                $('#close-'+objetivo).show();
+            }
+        })(file);
+        reader.readAsDataURL(file);
+    }
+    else{
+        $('#vista-'+objetivo).attr('src',direc.imgDefault01);
+        $('#'+evt.target.id).val('');
+    }
+
+
+}
+//Manejo carga de archivo soporte
+function handleFileDocument(evt){
+    var files=evt.target.files,file=files[0];
+    if (!(file.type=='application/pdf')) {
+        msg('.cont-mensaje','Documento no válido','No se puede subir el archivo. Formatos permitidos .PDF','');
+        $('#input-archivo').val('');
+    }
+}
+function msg(target,titulo,contenido,footer){
+        target=$(target);
+        target.find('.alerta-sistema-titulo').html(titulo);
+        target.find('.alerta-sistema-texto').html(contenido);
+        target.find('.alerta-sistema-footer').html(footer);
+
+        if(target.hasClass('fadeOutRight')){
+            target.show();
+            target.removeClass('fadeOutRight').addClass('fadeInRight');
+        }
+
+    temp=setTimeout(function(){
+        $('.cont-mensaje').removeClass('fadeInRight').addClass('fadeOutRight');
+    },4000);
+}
+function msg_config(config){
+    /*
+    {
+        target:[elemento clase, id],
+        titulo:titulo de la ventana,
+        contenido:cuerpo de la ventana,
+        footer:pie de ventana,
+        tiempo: tiempo en aparicion milisegundos
+    }
+    */
+        target=$(config.target);
+        target.find('.alerta-sistema-titulo').html(config.titulo);
+        target.find('.alerta-sistema-texto').html(config.contenido);
+        target.find('.alerta-sistema-footer').html(config.footer);
+
+        if(target.hasClass('fadeOutRight')){
+            target.show();
+            target.removeClass('fadeOutRight').addClass('fadeInRight');
+        }
+    if(config.tiempo){
+        temp=setTimeout(function(){
+            $('.cont-mensaje').removeClass('fadeInRight').addClass('fadeOutRight').hide();
+        },config.tiempo);
+    }
+}
+function msg_close(obj){
+    obj=$(obj);
+     $(obj.data('target')).removeClass('fadeInRight').addClass('fadeOutRight').hide();
+}
+function toggleFullScreen(elem) {
+    // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+    if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+        if (elem.requestFullScreen) {
+            elem.requestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    } else {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+}
+function toUpperCase(string){
+    if(string!='' && string != undefined){
+        return string.toUpperCase();
+    }else{
+        return '';
+    }
+}
+function toLowerCase(string){
+    if(string!='' && string != undefined){
+        return string.toLowerCase();
+    }else{
+        return '';
+    }
+}
+function capitalize(string) {
+    if(string!='' && string != undefined){
+        return string.replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function($1){
+           return $1.toUpperCase(); 
+        });
+    }
+    else{
+        return '';
+    }        
+}
+function generarSelectNum(datos,seleccinado){
+    options='';
+    for(i=1;i<=datos;i++){
+        selected='';
+        if(i==seleccinado){
+            selected='selected';
+        }
+        options+='<option value="'+i+'" '+selected+'>'+i+'</option>';
+    }
+    if(options==''){
+        options='<option value="1">1</option>';
+    }
+    return options;
+}
+function generarSelectObj(datos,seleccinado){
+    options='';
+    for(x in datos){
+        dato=datos[x];
+        selected='';
+        if(dato.value==seleccinado){
+            selected='selected';
+        }
+        options+='<option value="'+dato.value+'" '+selected+'>'+dato.text+'</option>';        
+    }
+    if(options==''){
+        options='<option value="5">5</option>';
+    }
+    return options;
+}function generarSelectObjSimple(datos,seleccinado){
+    options='';
+    for(x in datos){
+        dato=datos[x];
+        selected='';
+        if(x==seleccinado){
+            selected='selected';
+        }
+        options+='<option value="'+x+'" '+selected+'>'+dato+'</option>';        
+    }
+    if(options==''){
+        options='<option value="0">Sin datos</option>';
+    }
+    return options;
+}
+function printIframe(iFrameId) {
+    $(iFrameId).get(0).contentWindow.print();
+}
+function obtenerNombreMes(number){
+     var meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+     return meses[number];
+}
+function obtenerFechaString(fecha){
+    var meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    fecha=fecha.split('-');
+    fecha[1]=meses[fecha[1]-1];
+    return fecha[2]+' '+fecha[1]+' '+fecha[0];
+}
+function getParameterByName(name) {
+    var url = window.location.href,
+    length=url.length,
+    postGET = url.search('get/')+4,
+    url = url.substring(postGET,(length-1)),
+    vars = url.split("&");
+    for (var i=0; i < vars.length; i++) {
+       var pair = vars[i].split("=");
+       if(pair[0] == name) {
+           return decodeURI(pair[1]);
+       }
+    }
+    return '';
+}
+function cargarChosen(target){
+    $(target).chosen({
+        disable_search_threshold: 10,
+        no_results_text: "No se hay resultados",
+        width: "100%",
+        disable_search: false,
+    });
+
+
+}
+function sanitizeString(string){
+    if(string!='' && string!=null && string!=undefined){
+        string = string.replaceAll("'","");
+        string = string.replaceAll('"',"");
+        return string.trim();
+    }
+    else{
+        return '';
+    }
+}
+
+
+function iniciarPlanesDeVida(){
+
+    $.ajax({
+        method:'GET',
+        url:direc.ruta+'json/planesdevidaacin.json',
+        dataType:'json',
+        success:function(response){
+            direc.planesdevida=response;
+        }
+    });
+}
+iniciarPlanesDeVida();

@@ -1,0 +1,8 @@
+.img-bg{
+	background-image: url('/img/principales/bg-musica.png') !important;
+}
+.img-bg-chumbe{
+	background-image: url('/img/principales/bg-chumbe.png') !important;
+	background-repeat: repeat-x;
+}
+
